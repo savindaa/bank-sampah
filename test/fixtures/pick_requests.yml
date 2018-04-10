@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  pr_id: MyString
+  customer_id: 1
+  customer_address: MyString
+  branch_id: 1
+  branch_name: MyString
+  amount: 1
+  point_received: 1
+  accepted: false
+  status: MyString
+
+two:
+  pr_id: MyString
+  customer_id: 1
+  customer_address: MyString
+  branch_id: 1
+  branch_name: MyString
+  amount: 1
+  point_received: 1
+  accepted: false
+  status: MyString

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  plastik: 9.99
+  kertas: 9.99
+  botol: 9.99
+  besi: 9.99
+  other: 9.99
+  point_received: 1
+
+two:
+  plastik: 9.99
+  kertas: 9.99
+  botol: 9.99
+  besi: 9.99
+  other: 9.99
+  point_received: 1
