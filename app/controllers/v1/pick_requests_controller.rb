@@ -8,7 +8,7 @@ class V1::PickRequestsController < ApplicationController
 
     def show
         @pick_request = PickRequest.find(params[:id])
-        json_response(@pick_request)
+        json_response(@pick_request.as_json(except: [:customer_id, :branch_id]))
     end
 
     def create
@@ -45,23 +45,22 @@ class V1::PickRequestsController < ApplicationController
 
     def customer_active_pickrequest
         @pick_request = @customer.pick_requests.active.newest
-        # json_response(@pick_request.as_json(include: { customer:{ only: [:name, :phone_number] } }))
-        render json: @pick_request
+        render json: { pickrequest: @pick_request.as_json(except: [:customer_id, :branch_id]) }
     end
 
     def customer_history_pickrequest
         @pick_request = @customer.pick_requests.history.newest
-        json_response(@pick_request.as_json(include: { customer:{ only: [:name, :phone_number] } }))
+        render json: { pickrequest: @pick_request.as_json(except: [:customer_id, :branch_id]) }
     end
 
     def branch_active_pickrequest
         @pick_request = @branch.pick_requests.active.newest
-        json_response(@pick_request.as_json(include: { customer:{ only: [:name, :phone_number] } }))
+        render json: { pickrequest: @pick_request.as_json(except: [:customer_id, :branch_id], include: { customer:{ only: [:name, :phone_number] } }) }
     end
 
     def branch_history_pickrequest
         @pick_request = @branch.pick_requests.history.newest
-        json_response(@pick_request.as_json(include: { customer:{ only: [:name, :phone_number] } }))
+        render json: { pickrequest: @pick_request.as_json(except: [:customer_id, :branch_id], include: { customer:{ only: [:name, :phone_number] } }) }
     end
 
     def destroy

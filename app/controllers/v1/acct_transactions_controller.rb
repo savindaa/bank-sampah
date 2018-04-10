@@ -43,22 +43,22 @@ class V1::AcctTransactionsController < ApplicationController
 
     def branch_transaction_active
         @acct_transactions = @branch.acct_transactions.active.newest
-        json_response(@acct_transactions)
+        render json: {transaction: @acct_transactions}
     end
 
     def branch_transaction_history
         @acct_transactions = @branch.acct_transactions.history.newest
-        json_response(@acct_transactions)
+        render json: {transaction: @acct_transactions}
     end
 
     def customer_transaction_active
         @acct_transactions = @customer.acct_transactions.active.newest
-        json_response(@acct_transactions)
+        render json: {transaction: @acct_transactions}
     end
 
     def customer_transaction_history
         @acct_transactions = @customer.acct_transactions.history.newest
-        json_response(@acct_transactions)    
+        render json: {transaction: @acct_transactions}    
     end
 
     def destroy

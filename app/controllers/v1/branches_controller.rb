@@ -4,7 +4,7 @@ class V1::BranchesController < ApplicationController
 
     def index
         @branches = Branch.all
-        render json: {branches: @branches}
+        render json: {branches: @branches.as_json(only: [:name, :provinsi, :kabupaten, :kecamatan, :kelurahan, :address])}
     end
 
     def create
