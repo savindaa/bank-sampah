@@ -1,4 +1,4 @@
-class V1:AdminsController < ApplicationController
+class V1::AdminsController < ApplicationController
     before_action :authenticate_admin, only: :destroy
 
     def create
