@@ -1,4 +1,4 @@
-class V1:ArticlesController < ApplicationController
+class V1::ArticlesController < ApplicationController
     before_action :authenticate_admin, only: [:create, :update, :destroy]
     before_action :set_article, except: :create
 
