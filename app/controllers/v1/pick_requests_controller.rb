@@ -8,7 +8,7 @@ class V1::PickRequestsController < ApplicationController
 
     def show
         @pick_request = PickRequest.find(params[:id])
-        json_response(@pick_request.as_json(except: [:customer_id, :branch_id]))
+        json_response(@pick_request)
     end
 
     def create
@@ -24,22 +24,22 @@ class V1::PickRequestsController < ApplicationController
     # status 4 => "Permintaan ditolak"
 
     def accept
-        @pick_request = @branch.pick_requests.find_by(id: params[:id]) if @branch
+        @pick_request = @branch.pick_requests.find(params[:id]) if @branch
 
         if @pick_request.status == "1"
             if @pick_request.update(accept_params) && (@pick_request.status == "2" || @pick_request.status == "4")
                 json_response(@pick_request)
             else
-                render json: { errors: @pick_request.errors }, status: :unprocessable_entity
+                json_error(@pick_request)
             end
         elsif @pick_request.status == "2"
             if @pick_request.update(accept_params) && pick_request.status == '3'
                 json_response(@pick_request)
             else
-                render json: { errors: @pick_request.errors }, status: :unprocessable_entity
+                json_error(@pick_request)
             end
         else
-            render json: { errors: @pick_request.errors }, status: :unprocessable_entity
+            json_error(@pick_request)
         end
     end
 
@@ -65,12 +65,12 @@ class V1::PickRequestsController < ApplicationController
 
     def destroy
         @branch = current_branch
-        @pick_request = @branch.pick_requests.find_by(id: params[:id]) if @branch
+        @pick_request = @branch.pick_requests.find(params[:id]) if @branch
         if @pick_request.status == '1' || @pick_request.status == '2' || @pick_request.status == '4'
             @pick_request.destroy
             head 204
         else
-            render json: { errors: @pick_request.errors }, status: :unprocessable_entity
+            json_error(@pick_request)
         end
     end
 
@@ -85,8 +85,8 @@ class V1::PickRequestsController < ApplicationController
     end
 
     def request_params
-        params.require(:pick_request).permit(:provinsi, :kabupaten, :kecamatan, :kelurahan, 
-                                            :customer_address, :branch_name)
+        params.require(:pick_request).permit(:provinsi, :kabupaten, :kecamatan, :kelurahan, :customer_address, :branch_name, 
+                                             trash_weight_attributes: [:plastik, :kertas, :botol, :besi, :other])
     end
 
     def accept_params

@@ -7,6 +7,10 @@ Rails.application.routes.draw do
     post 'secretadmin/login', to: 'admin_token#create'
     delete 'secretadmin/delete', to: 'admins#destroy'
     
+    # admin block customer or branch
+    put 'secretadmin/customer/:phone_number', to: 'customers#blocking'
+    put 'secretadmin/branch/:phone_number', to: 'branches#blocking'
+    
     # customer index, create, login, profile, update
     get 'customer/index', to: 'customers#index'
     post 'customer/signup', to: 'customers#create'
@@ -26,17 +30,10 @@ Rails.application.routes.draw do
     post 'branch/deposit', to: 'acct_transactions#deposit'
     
     # transaction, /v1/acct_transactions/[:id] , :update -> update aprroved from false to true
-    scope shallow_prefix: 'deposit' do
-      resources :acct_transactions, only: [:show, :update, :destroy] do
-        resources :trash_weights, shallow: true
-      end
-    end
+    resources :acct_transactions, only: [:show, :update, :destroy]
 
-    scope shallow_prefix: 'pickrequest' do
-      resources :pick_requests, only: [:show] do
-        resources :trash_weights, shallow: true
-      end
-    end
+    # jemput sampah, /v1/pick_requests/:id
+    resources :pick_requests, only: [:show]
 
     # showing transaction
     get 'customer/active_transaction', to: 'acct_transactions#customer_transaction_active'
@@ -50,15 +47,10 @@ Rails.application.routes.draw do
     get 'branch/active_pickrequest', to: 'pick_requests#branch_active_pickrequest'
     get 'branch/history_pickrequest', to: 'pick_requests#branch_history_pickrequest'
 
-    # showing branch's all withdraw request from customers
-    get 'branch/withdraw_request', to: 'acct_transactions#need_tobe_approved'
-
-    # voucher (index, show, create, update, destroy)
-
+    # voucher, /v1/vouchers(/:id)
     resources :vouchers
 
     # my voucher
-
     get 'customer/voucher/all', to: 'my_vouchers#index'
     post 'customer/voucher/new', to: 'my_vouchers#create'
     get 'customer/voucher/:id', to: 'my_vouchers#show'
@@ -66,7 +58,6 @@ Rails.application.routes.draw do
     delete 'customer/voucher/delete', to: 'my_vouchers#destroy'
 
     # article (index, show, create, update, destroy)
-
     resources :articles
 
     
@@ -74,8 +65,6 @@ Rails.application.routes.draw do
     # di bawah ini route belum final
 
     # pick request
-
-    get 'pickrequest/show/:id', to: 'pick_requests#show'
     post 'customer/pickrequest', to: 'pick_requests#create'
     put 'branch/pickrequest/:id', to: 'pick_requests#accept'
 

@@ -1,5 +1,6 @@
 class V1::BranchesController < ApplicationController
-    before_action :authenticate_branch, except: [:index, :create]
+    before_action :authenticate_branch, except: [:index, :create, :blocking]
+    # before_action :authenticate_admin, only: [:blocking]
     before_action :set_branch, only: [:show, :update, :destroy]
 
     def index
@@ -8,8 +9,7 @@ class V1::BranchesController < ApplicationController
     end
 
     def create
-        @branch = Branch.new(register_params)
-        @branch.save!
+        @branch = Branch.create!(register_params)
         @branch.formatting_name
         json_response(@branch, :created)
     end
@@ -28,6 +28,12 @@ class V1::BranchesController < ApplicationController
         head 204
     end
 
+    def blocking
+        @branch = Branch.find_by(phone_number: params[:phone_number])
+        @branch.update(block_params)
+        json_response(@branch)
+    end
+
     private
 
     def set_branch
@@ -41,5 +47,9 @@ class V1::BranchesController < ApplicationController
     def branch_params
         params.require(:branch).permit(:name, :phone_number, :password, :password_confirmation,  
         :provinsi, :kabupaten, :kecamatan, :kelurahan, :address, :profile_picture)
+    end
+
+    def block_params
+        params.require(:branch).permit(:blocked)
     end
 end

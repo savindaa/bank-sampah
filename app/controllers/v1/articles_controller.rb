@@ -1,6 +1,11 @@
 class V1::ArticlesController < ApplicationController
-    before_action :authenticate_admin, only: [:create, :update, :destroy]
+    before_action :authenticate_admin, except: [:show, :index]
     before_action :set_article, except: :create
+
+    def index
+        @articles = Article.all
+        json_response(@articles)
+    end
 
     def create
         @article = Article.create!(article_params)

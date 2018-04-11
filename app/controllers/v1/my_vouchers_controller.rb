@@ -25,10 +25,10 @@ class V1::MyVouchersController < ApplicationController
             if @my_voucher.update(params[:used]) && @my_voucher.used == true
                 json_response(@my_voucher)
             else
-                render json: { errors: @my_voucher.errors }, status: :unprocessable_entity
+                json_error(@my_voucher)
             end
         else
-            render json: { errors: @my_voucher.errors }, status: :unprocessable_entity
+            json_error(@my_voucher)
         end
     end
 

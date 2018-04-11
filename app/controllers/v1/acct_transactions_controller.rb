@@ -26,7 +26,7 @@ class V1::AcctTransactionsController < ApplicationController
     end
 
     def update
-        @acct_transaction = @branch.acct_transactions.find_by(id: params[:id]) if @branch
+        @acct_transaction = @branch.acct_transactions.find(params[:id]) if @branch
 
         if @acct_transaction.approved == false
             @acct_transaction.adjust_balance
@@ -34,10 +34,10 @@ class V1::AcctTransactionsController < ApplicationController
                 @acct_transaction.modify_acct_balance
                 json_response(@acct_transaction)
             else
-                render json: { errors: @acct_transaction.errors }, status: :unprocessable_entity
+                json_error(@acct_transaction)
             end
         else
-            render json: { errors: @acct_transaction.errors }, status: :unprocessable_entity
+            json_error(@acct_transaction)
         end
     end
 
@@ -62,12 +62,12 @@ class V1::AcctTransactionsController < ApplicationController
     end
 
     def destroy
-        @acct_transaction = @branch.acct_transactions.find_by(id: params[:id]) if @branch
+        @acct_transaction = @branch.acct_transactions.find(params[:id]) if @branch
         if @acct_transaction.approved == false
             @acct_transaction.destroy
             head 204
         else
-            render json: { errors: @acct_transaction.errors }, status: :unprocessable_entity 
+            json_error(@acct_transaction) 
         end
     end
 
@@ -82,7 +82,7 @@ class V1::AcctTransactionsController < ApplicationController
     end
 
     def deposit_params
-        params.require(:acct_transaction).permit(:customer_phone_number)
+        params.require(:acct_transaction).permit(:customer_phone_number, trash_weight_attributes: [:plastik, :kertas, :botol, :besi, :other])
     end
 
     def withdraw_params

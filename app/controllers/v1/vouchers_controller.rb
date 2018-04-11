@@ -1,5 +1,5 @@
 class V1::VouchersController < ApplicationController
-    before_action :authenticate_admin, except: :show
+    before_action :authenticate_admin, except: [:show, :index]
 
     def index
         @vouchers = Voucher.all 
