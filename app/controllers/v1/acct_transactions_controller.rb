@@ -22,7 +22,7 @@ class V1::AcctTransactionsController < ApplicationController
         @acct_transaction = @customer.acct_transactions.new(withdraw_params)
         @acct_transaction.withdraw_setting(@customer)
         @acct_transaction.save!
-        json_response(@acct_transaction, :created)
+        json_response_post(@acct_transaction)
     end
 
     def update
