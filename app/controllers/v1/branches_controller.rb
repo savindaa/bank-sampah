@@ -5,13 +5,15 @@ class V1::BranchesController < ApplicationController
 
     def index
         @branches = Branch.all
-        render json: {branches: @branches.as_json(only: [:name, :provinsi, :kabupaten, :kecamatan, :kelurahan, :address])}
+        render json: {branches: @branches.as_json(only: [:id, :name, :provinsi, :kabupaten, :kecamatan, :kelurahan, :address])}
     end
 
     def create
-        @branch = Branch.create!(register_params)
+        @branch = Branch.new(register_params)
+        @branch.password_confirmation = @branch.password
+        @branch.save!
         @branch.formatting_name
-        json_response(@branch, :created)
+        render json: { result: true }, status: :created
     end
 
     def show
@@ -41,7 +43,7 @@ class V1::BranchesController < ApplicationController
     end
 
     def register_params
-        params.require(:branch).permit(:name, :phone_number, :password, :password_confirmation)
+        params.require(:branch).permit(:name, :phone_number, :password)
     end
 
     def branch_params

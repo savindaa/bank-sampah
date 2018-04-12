@@ -9,8 +9,10 @@ class V1::CustomersController < ApplicationController
     end
 
     def create
-        @customer = Customer.create!(register_params)
-        json_response(@customer, :created)
+        @customer = Customer.new(register_params)
+        @customer.password_confirmation = @customer.password
+        @customer.save!
+        render json: { result: "Created" }, status: :created
     end
 
     def show
@@ -40,7 +42,7 @@ class V1::CustomersController < ApplicationController
     end
 
     def register_params
-        params.require(:customer).permit(:name, :phone_number, :password, :password_confirmation)
+        params.require(:customer).permit(:name, :phone_number, :password)
     end
 
     def customer_params

@@ -85,8 +85,7 @@ class V1::PickRequestsController < ApplicationController
     end
 
     def request_params
-        params.require(:pick_request).permit(:provinsi, :kabupaten, :kecamatan, :kelurahan, :customer_address, :branch_name, 
-                                             trash_weight_attributes: [:plastik, :kertas, :botol, :besi, :other])
+        params.require(:pick_request).permit(:customer_address, :branch_id, trash_weight_attributes: [:plastik, :kertas, :botol, :besi, :other])
     end
 
     def accept_params

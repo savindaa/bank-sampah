@@ -15,7 +15,7 @@ class V1::AcctTransactionsController < ApplicationController
         @acct_transaction = @branch.acct_transactions.new(deposit_params)
         @acct_transaction.deposit_setting(@branch)
         @acct_transaction.save!
-        json_response(@acct_transaction, :created)
+        json_response_post(@acct_transaction)
     end
 
     def withdraw
