@@ -32,8 +32,12 @@ class V1::BranchesController < ApplicationController
 
     def blocking
         @branch = Branch.find_by(phone_number: params[:phone_number])
-        @branch.update(block_params)
-        json_response(@branch)
+        if !@branch.nil?
+            @branch.update(block_params)
+            json_response_post(@branch)
+        else
+            render json: { result: false, message: 'Bank tidak terdaftar' }
+        end
     end
 
     private
@@ -43,7 +47,7 @@ class V1::BranchesController < ApplicationController
     end
 
     def register_params
-        params.require(:branch).permit(:name, :phone_number, :password)
+        params.require(:branch).permit(:name, :phone_number, :address, :password)
     end
 
     def branch_params

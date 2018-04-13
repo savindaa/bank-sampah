@@ -9,8 +9,8 @@ class AcctTransaction < ApplicationRecord
 
     accepts_nested_attributes_for :trash_weight, allow_destroy: true
 
-    scope :active, -> { where(approved: false) }
-    scope :history, -> { where(approved: true) }
+    scope :active, -> { where(approved: false, showed: true) }
+    scope :history, -> { where(approved: true, showed: true) }
     scope :newest, -> { order(updated_at: :desc) }
 
     validates :amount, presence: true, numericality: { only_integer: true }

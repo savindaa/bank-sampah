@@ -5,7 +5,8 @@ class Branch < ApplicationRecord
     has_many :pick_requests
     
     validates :name, presence: true, length: { in: 3..50 }
-    validates :phone_number, presence: true, format: { with: VALID_PHONE_REGEX }, uniqueness: true
+    validates :phone_number, presence: true, format: { with: VALID_PHONE_REGEX }
+    validates :address, presence: true
     has_secure_password
     validates :password, presence: true, length: { in: 6..20 }, allow_nil: true
 

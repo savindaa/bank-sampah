@@ -26,8 +26,12 @@ class V1::CustomersController < ApplicationController
 
     def blocking
         @customer = Customer.find_by(phone_number: params[:phone_number])
-        @customer.update(block_params)
-        json_response(@customer)
+        if !@customer.nil?
+            @customer.update(block_params)
+            json_response_post(@customer)
+        else
+            render json: { result: false, message: 'Nasabah tidak terdaftar' }
+        end
     end
 
     def destroy

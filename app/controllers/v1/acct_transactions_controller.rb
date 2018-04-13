@@ -13,25 +13,36 @@ class V1::AcctTransactionsController < ApplicationController
 
     def deposit
         @acct_transaction = @branch.acct_transactions.new(deposit_params)
-        @acct_transaction.deposit_setting(@branch)
-        @acct_transaction.save!
-        render json: { result: true, acct_transaction: @acct_transaction.as_json(except: [:point_received, :adjusted_bal],include: { trash_weight: {only: [:plastik, :kertas, :botol, :besi, :other] } }) }
+        if !Customer.find_by(phone_number: @acct_transaction.customer_phone_number).nil?
+            @acct_transaction.deposit_setting(@branch)
+            @acct_transaction.save!
+            render json: { result: true, acct_transaction: @acct_transaction.as_json(except: [:point_received, :adjusted_bal],include: { trash_weight: {only: [:plastik, :kertas, :botol, :besi, :other] } }) }
+        else
+            render json: { result: false, message: 'Nasabah tidak terdaftar' }
+        end
     end
 
     def withdraw
         @acct_transaction = @customer.acct_transactions.new(withdraw_params)
-        @acct_transaction.withdraw_setting(@customer)
-        @acct_transaction.save!
-        json_response_post(@acct_transaction)
+        if !Branch.find_by(name: @acct_transaction.branch_name).nil?
+            @acct_transaction.withdraw_setting(@customer)
+            @acct_transaction.save!
+            json_response_post(@acct_transaction)
+        else
+            render json: { result: false, message: 'Bank tidak terdaftar'}
+        end
     end
 
     def update
         @acct_transaction = @branch.acct_transactions.find(params[:id]) if @branch
 
-        if @acct_transaction.approved == false
+        if @acct_transaction.approved == false && @acct_transaction.showed == true
             @acct_transaction.adjust_balance
             if @acct_transaction.update(approval_params) && @acct_transaction.approved == true
                 @acct_transaction.modify_acct_balance
+                json_true
+            elsif
+                @acct_transaction.update(approval_params) && @acct_transaction.showed == false
                 json_true
             else
                 json_error(@acct_transaction)
@@ -90,6 +101,6 @@ class V1::AcctTransactionsController < ApplicationController
     end
 
     def approval_params
-        params.require(:acct_transaction).permit(:approved)
+        params.require(:acct_transaction).permit(:approved, :showed)
     end
 end
