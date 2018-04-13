@@ -38,13 +38,15 @@ class V1::AcctTransactionsController < ApplicationController
 
         if @acct_transaction.approved == false && @acct_transaction.showed == true
             @acct_transaction.adjust_balance
-            if @acct_transaction.update(approval_params) && @acct_transaction.approved == true
+            if @acct_transaction.update(approval_params) && @acct_transaction.approved == true && @acct_transaction.showed == true
                 @acct_transaction.modify_acct_balance
                 json_true
             elsif
-                @acct_transaction.update(approval_params) && @acct_transaction.showed == false
+                @acct_transaction.update(approval_params) && @acct_transaction.approved == false && @acct_transaction.showed == false
                 json_true
             else
+                @acct_transaction.update(approved: false)
+                @acct_transaction.update(showed: true)
                 json_error(@acct_transaction)
             end
         else

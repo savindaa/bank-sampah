@@ -47,6 +47,8 @@ class AcctTransaction < ApplicationRecord
         self.transaction_type_id = "1"
         self.modify_transaction
         self.adjust_balance
+        self.update(approved: true)
+        self.modify_acct_balance
     end
 
     def withdraw_setting (current_customer)

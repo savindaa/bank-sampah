@@ -31,12 +31,14 @@ class V1::PickRequestsController < ApplicationController
             if @pick_request.update(accept_params) && (@pick_request.status == "2" || @pick_request.status == "4")
                 json_true
             else
+                @pick_request.update(status: "1")
                 json_error(@pick_request)
             end
         elsif @pick_request.status == "2"
-            if @pick_request.update(accept_params) && pick_request.status == '3'
+            if @pick_request.update(accept_params) && (@pick_request.status == '3' || @pick_request.status =="4")
                 json_true
             else
+                @pick_request.update(status: "2")
                 json_error(@pick_request)
             end
         else

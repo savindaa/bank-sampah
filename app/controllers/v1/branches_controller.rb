@@ -4,7 +4,7 @@ class V1::BranchesController < ApplicationController
     before_action :set_branch, only: [:show, :update, :destroy]
 
     def index
-        @branches = Branch.all
+        @branches = Branch.all.order(created_at: :desc)
         render json: {branches: @branches.as_json(only: [:id, :name, :provinsi, :kabupaten, :kecamatan, :kelurahan, :address])}
     end
 
