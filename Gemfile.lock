@@ -57,6 +57,7 @@ GEM
       activesupport (>= 4.2.0)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
+    indonesia (0.5.0)
     jsonapi-renderer (0.2.0)
     jwt (1.5.6)
     knock (2.1.1)
@@ -145,6 +146,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   bcrypt (~> 3.1.7)
   byebug
+  indonesia (~> 0.5.0)
   jwt
   knock
   listen (>= 3.0.5, < 3.2)

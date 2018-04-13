@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180409133443) do
+ActiveRecord::Schema.define(version: 20180413091913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,13 @@ ActiveRecord::Schema.define(version: 20180409133443) do
     t.index ["phone_number"], name: "index_customers_on_phone_number"
   end
 
+  create_table "districts", id: false, force: :cascade do |t|
+    t.integer "code", null: false
+    t.integer "regency_code", null: false
+    t.string "name", null: false
+    t.index ["regency_code"], name: "index_districts_on_regency_code"
+  end
+
   create_table "my_vouchers", force: :cascade do |t|
     t.integer "voucher_id"
     t.integer "customer_id"
@@ -101,13 +108,8 @@ ActiveRecord::Schema.define(version: 20180409133443) do
   create_table "pick_requests", force: :cascade do |t|
     t.string "pr_id"
     t.integer "customer_id"
-    t.string "provinsi"
-    t.string "kabupaten"
-    t.string "kecamatan"
-    t.string "kelurahan"
     t.string "customer_address"
     t.integer "branch_id"
-    t.string "branch_name"
     t.integer "amount", default: 0
     t.integer "point_received", default: 0
     t.string "status", default: "1"
@@ -118,6 +120,18 @@ ActiveRecord::Schema.define(version: 20180409133443) do
     t.index ["customer_id"], name: "index_pick_requests_on_customer_id"
     t.index ["pr_id"], name: "index_pick_requests_on_pr_id"
     t.index ["status"], name: "index_pick_requests_on_status"
+  end
+
+  create_table "provinces", id: false, force: :cascade do |t|
+    t.integer "code", null: false
+    t.string "name", null: false
+  end
+
+  create_table "regencies", id: false, force: :cascade do |t|
+    t.integer "code", null: false
+    t.integer "province_code", null: false
+    t.string "name", null: false
+    t.index ["province_code"], name: "index_regencies_on_province_code"
   end
 
   create_table "trash_weights", force: :cascade do |t|
@@ -145,6 +159,13 @@ ActiveRecord::Schema.define(version: 20180409133443) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "villages", id: false, force: :cascade do |t|
+    t.bigint "code", null: false
+    t.integer "district_code", null: false
+    t.string "name", null: false
+    t.index ["district_code"], name: "index_villages_on_district_code"
   end
 
   create_table "vouchers", force: :cascade do |t|

@@ -1,5 +1,6 @@
 class AcctTransaction < ApplicationRecord
     include Modifyable
+    include ValidateUserBlocked
 
     belongs_to :customer
     belongs_to :branch
@@ -16,7 +17,6 @@ class AcctTransaction < ApplicationRecord
     validates :branch_name, presence: true
     validates :customer_phone_number, presence: true
     validate  :funds_availability
-    validate  :is_it_blocked
     validate  :withdraw_amount_term
 
     # keterangan:
@@ -26,14 +26,6 @@ class AcctTransaction < ApplicationRecord
     def funds_availability
         if self.transaction_type_id == "2" && self.amount > Customer.find(self.customer_id).balance
             errors.add(:amount, 'Saldo Anda kurang')
-        end
-    end
-
-    def is_it_blocked
-        if Branch.find(self.branch_id).blocked == true
-            errors.add(:branch_name, 'Bank telah di-block')
-        elsif Customer.find(self.customer_id).blocked == true
-            errors.add(:customer_phone_number, 'Nasabah telah di-block')
         end
     end
 
@@ -72,7 +64,7 @@ class AcctTransaction < ApplicationRecord
         case self.transaction_type_id
             when "1"
               customer.update(balance: customer.balance + self.amount)
-              customer.update(point: customer.point + self.point_received)
+              # customer.update(point: customer.point + self.point_received)
               branch.update(balance: branch.balance + self.amount)
             when "2"
               customer.update(balance: customer.balance - self.amount)

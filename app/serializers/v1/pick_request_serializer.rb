@@ -1,8 +1,7 @@
 class V1::PickRequestSerializer < ActiveModel::Serializer
-  attributes :id, :pr_id, :provinsi, :kabupaten, :kecamatan, :kelurahan, :customer_address,
-             :amount, :created_at, :branch_name, :status, :comment, :confirmed_at
-
-  belongs_to :customer
+  attributes :id, :pr_id, :customer_address, :amount, :created_at, :status, :comment, :confirmed_at
+  belongs_to :branch
+  belongs_to :customer, only: [:name, :phone_number]
   has_one :trash_weight
 
   def created_at

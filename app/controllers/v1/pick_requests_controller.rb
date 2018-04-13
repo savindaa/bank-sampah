@@ -15,7 +15,8 @@ class V1::PickRequestsController < ApplicationController
         @pick_request = @customer.pick_requests.new(request_params)
         @pick_request.request_setting(@customer)
         @pick_request.save!
-        json_response(@pick_request, :created)
+        render json: { result: true, pick_request: @pick_request.as_json(except: [:customer_id, :branch_id],
+                                                                        include: { trash_weight: {only: [:plastik, :kertas, :botol, :besi, :other] } }) }
     end
 
     # status 1 => "Menunggu konfirmasi"
@@ -28,13 +29,13 @@ class V1::PickRequestsController < ApplicationController
 
         if @pick_request.status == "1"
             if @pick_request.update(accept_params) && (@pick_request.status == "2" || @pick_request.status == "4")
-                json_response(@pick_request)
+                json_true
             else
                 json_error(@pick_request)
             end
         elsif @pick_request.status == "2"
             if @pick_request.update(accept_params) && pick_request.status == '3'
-                json_response(@pick_request)
+                json_true
             else
                 json_error(@pick_request)
             end

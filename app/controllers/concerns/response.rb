@@ -11,4 +11,8 @@ module Response
     def json_response_post (object)
         render json: { result: true, object: object }, status: :created
     end
+
+    def json_true (status = :ok)
+        render json: { result: true }, status: status
+    end
 end

@@ -60,6 +60,12 @@ Rails.application.routes.draw do
     # article (index, show, create, update, destroy)
     resources :articles
 
+    # wilayah indonesia
+    get 'provinsi', to: 'indonesia#index_province'
+    get 'kabupaten', to: 'indonesia#index_regency'
+    get 'kecamatan/:regency_code', to: 'indonesia#index_district'
+    get 'kelurahan/:district_code', to: 'indonesia#index_village'
+
     
 
     # di bawah ini route belum final

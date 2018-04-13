@@ -13,7 +13,7 @@ class V1::BranchesController < ApplicationController
         @branch.password_confirmation = @branch.password
         @branch.save!
         @branch.formatting_name
-        render json: { result: true }, status: :created
+        json_true(:created)
     end
 
     def show
@@ -22,7 +22,7 @@ class V1::BranchesController < ApplicationController
 
     def update
         @branch.update(branch_params)
-        json_response(@branch)
+        json_true
     end
 
     def destroy

@@ -15,7 +15,7 @@ class V1::AcctTransactionsController < ApplicationController
         @acct_transaction = @branch.acct_transactions.new(deposit_params)
         @acct_transaction.deposit_setting(@branch)
         @acct_transaction.save!
-        json_response_post(@acct_transaction)
+        render json: { result: true, acct_transaction: @acct_transaction.as_json(except: [:point_received, :adjusted_bal],include: { trash_weight: {only: [:plastik, :kertas, :botol, :besi, :other] } }) }
     end
 
     def withdraw
@@ -32,7 +32,7 @@ class V1::AcctTransactionsController < ApplicationController
             @acct_transaction.adjust_balance
             if @acct_transaction.update(approval_params) && @acct_transaction.approved == true
                 @acct_transaction.modify_acct_balance
-                json_response(@acct_transaction)
+                json_true
             else
                 json_error(@acct_transaction)
             end
