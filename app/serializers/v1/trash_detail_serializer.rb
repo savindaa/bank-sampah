@@ -1,3 +1,3 @@
 class V1::TrashDetailSerializer < ActiveModel::Serializer
-  attributes :name, :weight
+  attributes :item_name, :weight
 end
