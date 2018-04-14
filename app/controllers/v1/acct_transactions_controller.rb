@@ -16,7 +16,7 @@ class V1::AcctTransactionsController < ApplicationController
         if !Customer.find_by(phone_number: @acct_transaction.customer_phone_number).nil?
             @acct_transaction.deposit_setting(@branch)
             @acct_transaction.save!
-            render json: { result: true, acct_transaction: @acct_transaction.as_json(except: [:point_received, :adjusted_bal],include: { trash_weight: {only: [:plastik, :kertas, :botol, :besi, :other] } }) }
+            render json: { result: true, acct_transaction: @acct_transaction.as_json(except: [:point_received, :adjusted_bal],include: { trash_details: { only: [:item_name, :weight] } }) }
         else
             render json: { result: false, message: 'Nasabah tidak terdaftar' }
         end
@@ -95,7 +95,7 @@ class V1::AcctTransactionsController < ApplicationController
     end
 
     def deposit_params
-        params.require(:acct_transaction).permit(:customer_phone_number, trash_weight_attributes: [:plastik, :kertas, :botol, :besi, :other])
+        params.require(:acct_transaction).permit(:customer_phone_number, trash_details_attributes: [:item_name, :weight])
     end
 
     def withdraw_params

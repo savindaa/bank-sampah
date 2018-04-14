@@ -1,12 +1,6 @@
 module Modifyable
     extend ActiveSupport::Concerns
 
-    PLASTIK_PRICE = 800
-    KERTAS_PRICE = 850
-    BOTOL_PRICE = 500
-    BESI_PRICE = 2300
-    OTHER_PRICE = 500
-
     # POINT_MULTIPLICATION = 100
 
     def modify_transaction

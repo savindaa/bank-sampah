@@ -74,7 +74,7 @@ Rails.application.routes.draw do
     post 'customer/pickrequest', to: 'pick_requests#create'
     put 'branch/pickrequest/:id', to: 'pick_requests#accept'
 
-    
+    get 'item/price', to: 'items#index'
     
   end
 end

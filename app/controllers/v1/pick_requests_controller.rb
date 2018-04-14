@@ -16,7 +16,7 @@ class V1::PickRequestsController < ApplicationController
         @pick_request.request_setting(@customer)
         @pick_request.save!
         render json: { result: true, pick_request: @pick_request.as_json(except: [:customer_id, :branch_id],
-                                                                        include: { trash_weight: { only: [:plastik, :kertas, :botol, :besi, :other] } }) }
+                                                                        include: { trash_details: { only: [:item_name, :weight] } }) }
     end
 
     # status 1 => "Menunggu konfirmasi"
@@ -88,7 +88,7 @@ class V1::PickRequestsController < ApplicationController
     end
 
     def request_params
-        params.require(:pick_request).permit(:customer_address, :branch_id, trash_weight_attributes: [:plastik, :kertas, :botol, :besi, :other])
+        params.require(:pick_request).permit(:customer_address, :branch_id, trash_details_attributes: [:item_name, :weight])
     end
 
     def accept_params

@@ -1,13 +1,15 @@
 class AcctTransaction < ApplicationRecord
-    include Modifyable
+    # include Modifyable
     include ValidateUserBlocked
 
     belongs_to :customer
     belongs_to :branch
 
-    has_one :trash_weight, as: :need_detail, dependent: :destroy
+    # has_one :trash_weight, as: :need_detail, dependent: :destroy
+    has_many :trash_details, as: :need_detail, dependent: :destroy
 
-    accepts_nested_attributes_for :trash_weight, allow_destroy: true
+    #accepts_nested_attributes_for :trash_weight, allow_destroy: true
+    accepts_nested_attributes_for :trash_details, allow_destroy:true
 
     scope :active, -> { where(approved: false, showed: true) }
     scope :history, -> { where(approved: true, showed: true) }
@@ -45,7 +47,7 @@ class AcctTransaction < ApplicationRecord
         self.customer_id = Customer.find_by(phone_number: self.customer_phone_number).id
         self.tr_id = rand(10..19).to_s + rand(10-49).to_s + rand(1_000_000..9_999_999).to_s
         self.transaction_type_id = "1"
-        self.modify_transaction
+        # self.modify_transaction
         self.adjust_balance
         self.update(approved: true)
         self.modify_acct_balance

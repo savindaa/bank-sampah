@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180413140127) do
+ActiveRecord::Schema.define(version: 20180414083940) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,6 +99,12 @@ ActiveRecord::Schema.define(version: 20180413140127) do
     t.index ["regency_code"], name: "index_districts_on_regency_code"
   end
 
+  create_table "items", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "price", null: false
+    t.index ["name"], name: "index_items_on_name"
+  end
+
   create_table "my_vouchers", force: :cascade do |t|
     t.integer "voucher_id"
     t.integer "customer_id"
@@ -134,6 +140,16 @@ ActiveRecord::Schema.define(version: 20180413140127) do
     t.integer "province_code", null: false
     t.string "name", null: false
     t.index ["province_code"], name: "index_regencies_on_province_code"
+  end
+
+  create_table "trash_details", force: :cascade do |t|
+    t.string "item_name"
+    t.decimal "weight"
+    t.integer "need_detail_id"
+    t.string "need_detail_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["need_detail_id", "need_detail_type"], name: "index_trash_details_on_need_detail_id_and_need_detail_type"
   end
 
   create_table "trash_weights", force: :cascade do |t|
