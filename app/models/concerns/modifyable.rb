@@ -1,46 +1,17 @@
 module Modifyable
-    extend ActiveSupport::Concerns
+    extend ActiveSupport::Concern
+
+    included do
+        before_save :record_amount 
+    end
 
     # POINT_MULTIPLICATION = 100
 
-    def modify_transaction
-        @price = TrashDetail.find_by(name: self.trash_details.item_name).price
-        sum += self.trash_details.weight * @price
-        self.update(amount: sum)
+    private
+
+    def record_amount
+        self.amount = trash_details.reject(&:marked_for_destruction?).sum(&:total_price)
+        # total_weight = trash_details.reject(&:marked_for_destruction?).sum(&:weight)
+        # self.point_received = total_weight.floor * POINT_MULTIPLICATION
     end
-=begin
-    def modify_transaction
-
-        plastik_weight = self.trash_weight.plastik
-        kertas_weight = self.trash_weight.kertas
-        botol_weight = self.trash_weight.botol
-        besi_weight = self.trash_weight.besi
-        other_weight = self.trash_weight.other
-
-        if self.trash_weight.plastik == nil
-            plastik_weight = 0.0
-        end
-
-        if self.trash_weight.kertas == nil
-            kertas_weight = 0.0
-        end
-
-        if self.trash_weight.botol == nil
-            botol_weight = 0.0
-        end
-
-        if self.trash_weight.besi == nil
-            besi_weight = 0.0
-        end
-
-        if self.trash_weight.other == nil
-            other_weight = 0.0
-        end
-
-        total_price = (plastik_weight * PLASTIK_PRICE).to_i + (kertas_weight * KERTAS_PRICE).to_i + (botol_weight * BOTOL_PRICE).to_i + (besi_weight * BESI_PRICE).to_i + (other_weight * OTHER_PRICE).to_i
-        total_weight = plastik_weight + kertas_weight + botol_weight + besi_weight + other_weight
-        self.update(amount: total_price)
-        # self.update(point_received: total_weight.floor * POINT_MULTIPLICATION)
-    end
-=end
 end

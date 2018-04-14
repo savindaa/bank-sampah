@@ -1,6 +1,4 @@
 class V1::AcctTransactionsController < ApplicationController
-    # before_action :authenticate_branch, except: [:index, :show, :withdraw, :customer_transaction_history]
-    # before_action :authenticate_customer, except: [:index, :show, :destroy, :deposit, :update, :branch_transaction_history]
     before_action :authenticate_branch, only: [:deposit, :update, :branch_transaction_active, :branch_transaction_history]
     before_action :authenticate_customer, only: [:withdraw, :customer_transaction_active, :customer_transaction_history]
     before_action :set_branch, only: [:deposit, :update, :branch_transaction_active, :branch_transaction_history, :destroy]
@@ -16,6 +14,7 @@ class V1::AcctTransactionsController < ApplicationController
         if !Customer.find_by(phone_number: @acct_transaction.customer_phone_number).nil?
             @acct_transaction.deposit_setting(@branch)
             @acct_transaction.save!
+            @acct_transaction.modify_acct_balance
             render json: { result: true, acct_transaction: @acct_transaction.as_json(except: [:point_received, :adjusted_bal],include: { trash_details: { only: [:item_name, :weight] } }) }
         else
             render json: { result: false, message: 'Nasabah tidak terdaftar' }

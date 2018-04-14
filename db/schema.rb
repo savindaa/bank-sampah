@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180414083940) do
+ActiveRecord::Schema.define(version: 20180414131728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -149,6 +149,7 @@ ActiveRecord::Schema.define(version: 20180414083940) do
     t.string "need_detail_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "total_price"
     t.index ["need_detail_id", "need_detail_type"], name: "index_trash_details_on_need_detail_id_and_need_detail_type"
   end
 
