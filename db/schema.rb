@@ -25,17 +25,15 @@ ActiveRecord::Schema.define(version: 20180414165051) do
     t.integer "amount", default: 0
     t.integer "point_received", default: 0
     t.integer "adjusted_bal"
-    t.boolean "approved", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "showed", default: true
+    t.string "status", default: "1"
     t.string "comment"
-    t.index ["approved"], name: "index_acct_transactions_on_approved"
     t.index ["branch_id"], name: "index_acct_transactions_on_branch_id"
     t.index ["branch_name"], name: "index_acct_transactions_on_branch_name"
     t.index ["customer_id"], name: "index_acct_transactions_on_customer_id"
     t.index ["customer_phone_number"], name: "index_acct_transactions_on_customer_phone_number"
-    t.index ["showed"], name: "index_acct_transactions_on_showed"
+    t.index ["status"], name: "index_acct_transactions_on_status"
     t.index ["tr_id"], name: "index_acct_transactions_on_tr_id"
   end
 

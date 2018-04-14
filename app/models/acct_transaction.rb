@@ -13,8 +13,8 @@ class AcctTransaction < ApplicationRecord
 
     accepts_nested_attributes_for :trash_details, allow_destroy:true
 
-    scope :active, -> { where(approved: false, showed: true) }
-    scope :history, -> { where(approved: true) }
+    scope :active, -> { where(status: "1") }
+    scope :history, -> { where(status: ["2", "3"]) }
     scope :newest, -> { order(updated_at: :desc) }
 
     validates :amount, presence: true, numericality: { only_integer: true }
@@ -22,7 +22,6 @@ class AcctTransaction < ApplicationRecord
     validates :customer_phone_number, presence: true
     validate  :funds_availability
     validate  :withdraw_amount_term
-    # validate :changing_withdraw
 
     # keterangan:
     # transaction_type_id = 1 , transaction_type_name = setoran (deposit)
@@ -57,7 +56,7 @@ class AcctTransaction < ApplicationRecord
         self.tr_id = rand(10..19).to_s + rand(10-49).to_s + rand(1_000_000..9_999_999).to_s
         self.transaction_type_id = "1"
         self.adjust_balance
-        self.update(approved: true)
+        self.update(status: "2")
     end
 
     def withdraw_setting (current_customer)

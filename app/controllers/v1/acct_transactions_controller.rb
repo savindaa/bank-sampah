@@ -32,20 +32,23 @@ class V1::AcctTransactionsController < ApplicationController
         end
     end
 
+    # status 1 => "Menunggu konfirmasi"
+    # status 2 => "Penarikan dana diterima"
+    # status 3 => "Penarikan dana ditolak"
+
     def update
         @acct_transaction = @branch.acct_transactions.find(params[:id]) if @branch
 
-        if @acct_transaction.approved == false && @acct_transaction.showed == true
+        if @acct_transaction.status == "1"
             @acct_transaction.adjust_balance
-            if @acct_transaction.update(approval_params) && @acct_transaction.approved == true && @acct_transaction.showed == true
+            if @acct_transaction.update(approval_params) && @acct_transaction.status == "2"
                 @acct_transaction.modify_acct_balance
                 json_true
             elsif
-                @acct_transaction.update(approval_params) && @acct_transaction.approved == false && @acct_transaction.showed == false
+                @acct_transaction.update(approval_params) && @acct_transaction.status == "3"
                 json_true
             else
-                @acct_transaction.update(approved: false)
-                @acct_transaction.update(showed: true)
+                @acct_transaction.update(status: "1")
                 json_error(@acct_transaction)
             end
         else
@@ -75,7 +78,7 @@ class V1::AcctTransactionsController < ApplicationController
 
     def destroy
         @acct_transaction = @branch.acct_transactions.find(params[:id]) if @branch
-        if @acct_transaction.approved == false
+        if @acct_transaction.status == "1"
             @acct_transaction.destroy
             head 204
         else
@@ -102,6 +105,6 @@ class V1::AcctTransactionsController < ApplicationController
     end
 
     def approval_params
-        params.require(:acct_transaction).permit(:approved, :showed, :comment)
+        params.require(:acct_transaction).permit(:status, :comment)
     end
 end
