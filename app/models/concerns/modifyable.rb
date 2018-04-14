@@ -4,6 +4,12 @@ module Modifyable
     # POINT_MULTIPLICATION = 100
 
     def modify_transaction
+        @price = TrashDetail.find_by(name: self.trash_details.item_name).price
+        sum += self.trash_details.weight * @price
+        self.update(amount: sum)
+    end
+=begin
+    def modify_transaction
 
         plastik_weight = self.trash_weight.plastik
         kertas_weight = self.trash_weight.kertas
@@ -36,4 +42,5 @@ module Modifyable
         self.update(amount: total_price)
         # self.update(point_received: total_weight.floor * POINT_MULTIPLICATION)
     end
+=end
 end
