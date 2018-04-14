@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180414131728) do
+ActiveRecord::Schema.define(version: 20180414165051) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 20180414131728) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "showed", default: true
+    t.string "comment"
     t.index ["approved"], name: "index_acct_transactions_on_approved"
     t.index ["branch_id"], name: "index_acct_transactions_on_branch_id"
     t.index ["branch_name"], name: "index_acct_transactions_on_branch_name"

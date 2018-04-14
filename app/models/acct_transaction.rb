@@ -1,6 +1,10 @@
 class AcctTransaction < ApplicationRecord
-    include Modifyable
+    
+    # include Modifyable
+    
     include ValidateUserBlocked
+
+    before_save :record_amount
 
     belongs_to :customer
     belongs_to :branch
@@ -10,7 +14,7 @@ class AcctTransaction < ApplicationRecord
     accepts_nested_attributes_for :trash_details, allow_destroy:true
 
     scope :active, -> { where(approved: false, showed: true) }
-    scope :history, -> { where(approved: true, showed: true) }
+    scope :history, -> { where(approved: true) }
     scope :newest, -> { order(updated_at: :desc) }
 
     validates :amount, presence: true, numericality: { only_integer: true }
@@ -18,10 +22,17 @@ class AcctTransaction < ApplicationRecord
     validates :customer_phone_number, presence: true
     validate  :funds_availability
     validate  :withdraw_amount_term
+    # validate :changing_withdraw
 
     # keterangan:
     # transaction_type_id = 1 , transaction_type_name = setoran (deposit)
     # transaction_type_id = 2 , transaction_type_name = penarikan (withdraw)
+
+    def record_amount
+        if self.transaction_type_id == "1"
+            self.amount = trash_details.reject(&:marked_for_destruction?).sum(&:total_price)
+        end
+    end
 
     def funds_availability
         if self.transaction_type_id == "2" && self.amount > Customer.find(self.customer_id).balance
@@ -52,7 +63,7 @@ class AcctTransaction < ApplicationRecord
     def withdraw_setting (current_customer)
         self.customer_id = current_customer.id
         self.customer_phone_number = current_customer.phone_number
-        self.branch_id = Branch.find_by(name: self.branch_name).id
+        self.branch_name = Branch.find(self.branch_id).name
         self.tr_id = rand(10..19).to_s + rand(50-99).to_s + rand(1_000_000..9_999_999).to_s
         self.transaction_type_id = "2"
         self.adjust_balance

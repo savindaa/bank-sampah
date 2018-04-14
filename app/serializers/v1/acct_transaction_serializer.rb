@@ -1,8 +1,6 @@
 class V1::AcctTransactionSerializer < ActiveModel::Serializer
-  attributes :id, :tr_id, :transaction_type_id, :customer_phone_number, 
-              :amount, :point_received, :created_at, :adjusted_bal, :branch_name, :approved, :confirmed_at
+  attributes :id, :tr_id, :transaction_type_id, :customer_phone_number, :amount, :created_at, :branch_name, :approved, :showed, :comment, :confirmed_at
 
-  # has_one :trash_weight
   has_many :trash_details
 
   def created_at

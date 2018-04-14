@@ -23,7 +23,7 @@ class V1::AcctTransactionsController < ApplicationController
 
     def withdraw
         @acct_transaction = @customer.acct_transactions.new(withdraw_params)
-        if !Branch.find_by(name: @acct_transaction.branch_name).nil?
+        if !Branch.find(@acct_transaction.branch_id).nil?
             @acct_transaction.withdraw_setting(@customer)
             @acct_transaction.save!
             json_response_post(@acct_transaction)
@@ -98,10 +98,10 @@ class V1::AcctTransactionsController < ApplicationController
     end
 
     def withdraw_params
-        params.require(:acct_transaction).permit(:amount, :branch_name)
+        params.require(:acct_transaction).permit(:amount, :branch_id)
     end
 
     def approval_params
-        params.require(:acct_transaction).permit(:approved, :showed)
+        params.require(:acct_transaction).permit(:approved, :showed, :comment)
     end
 end
