@@ -28,7 +28,7 @@ class V1::AcctTransactionsController < ApplicationController
             @acct_transaction.save!
             json_response_post(@acct_transaction)
         else
-            render json: { result: false, message: 'Bank tidak terdaftar'}
+            render json: { result: false, message: 'Bank tidak terdaftar' }
         end
     end
 
@@ -58,12 +58,12 @@ class V1::AcctTransactionsController < ApplicationController
 
     def branch_transaction_active
         @acct_transactions = @branch.acct_transactions.active.newest
-        render json: {transaction: @acct_transactions}
+        render json: {transaction: @acct_transactions.as_json(except: [:point_received, :adjusted_bal],include: { customer: { only: :name } }) }
     end
 
     def branch_transaction_history
         @acct_transactions = @branch.acct_transactions.history.newest
-        render json: {transaction: @acct_transactions}
+        render json: {transaction: @acct_transactions.as_json(except: [:point_received, :adjusted_bal],include: { customer: { only: :name } }) }
     end
 
     def customer_transaction_active

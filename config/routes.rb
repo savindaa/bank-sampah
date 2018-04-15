@@ -1,15 +1,6 @@
 Rails.application.routes.draw do
   
   api_version(:module => "V1", :path => {:value => "v1"}) do
-
-    # admin create, login
-    post 'secretadmin/signup', to: 'admins#create'
-    post 'secretadmin/login', to: 'admin_token#create'
-    delete 'secretadmin/delete', to: 'admins#destroy'
-    
-    # admin block customer or branch
-    put 'secretadmin/customer/:phone_number', to: 'customers#blocking'
-    put 'secretadmin/branch/:phone_number', to: 'branches#blocking'
     
     # customer index, create, login, profile, update
     get 'customer/index', to: 'customers#index'
@@ -25,15 +16,21 @@ Rails.application.routes.draw do
     get 'branch/profile', to: 'branches#show'
     put 'branch/update', to: 'branches#update'
 
-    # transaction withdraw, deposit
-    post 'customer/withdraw', to: 'acct_transactions#withdraw'
-    post 'branch/deposit', to: 'acct_transactions#deposit'
-    
+    # wilayah indonesia
+    get 'provinsi', to: 'indonesia#index_province'
+    get 'kabupaten', to: 'indonesia#index_regency'
+    get 'kecamatan/:regency_code', to: 'indonesia#index_district'
+    get 'kelurahan/:district_code', to: 'indonesia#index_village'
+
+    # pricing
+    get 'item/price', to: 'items#index'
+
     # transaction, /v1/acct_transactions/[:id] , :update -> update aprroved from false to true
     resources :acct_transactions, only: [:show, :update, :destroy]
 
-    # jemput sampah, /v1/pick_requests/:id
-    resources :pick_requests, only: [:show]
+    # transaction withdraw, deposit
+    post 'customer/withdraw', to: 'acct_transactions#withdraw'
+    post 'branch/deposit', to: 'acct_transactions#deposit'
 
     # showing transaction
     get 'customer/active_transaction', to: 'acct_transactions#customer_transaction_active'
@@ -41,11 +38,21 @@ Rails.application.routes.draw do
     get 'branch/active_transaction', to: 'acct_transactions#branch_transaction_active'
     get 'branch/history_transaction', to: 'acct_transactions#branch_transaction_history'
 
+    # jemput sampah, /v1/pick_requests/:id
+    resources :pick_requests, only: [:show]
+
+    # pick request
+    post 'customer/pickrequest', to: 'pick_requests#create'
+    put 'branch/pickrequest/:id', to: 'pick_requests#accept'
+
     # showing jemput sampah
     get 'customer/active_pickrequest', to: 'pick_requests#customer_active_pickrequest'
     get 'customer/history_pickrequest', to: 'pick_requests#customer_history_pickrequest'
     get 'branch/active_pickrequest', to: 'pick_requests#branch_active_pickrequest'
     get 'branch/history_pickrequest', to: 'pick_requests#branch_history_pickrequest'
+
+
+    # di bawah ini belum dipakai
 
     # voucher, /v1/vouchers(/:id)
     resources :vouchers
@@ -60,21 +67,15 @@ Rails.application.routes.draw do
     # article (index, show, create, update, destroy)
     resources :articles
 
-    # wilayah indonesia
-    get 'provinsi', to: 'indonesia#index_province'
-    get 'kabupaten', to: 'indonesia#index_regency'
-    get 'kecamatan/:regency_code', to: 'indonesia#index_district'
-    get 'kelurahan/:district_code', to: 'indonesia#index_village'
-
+    # admin create, login
+    post 'secretadmin/signup', to: 'admins#create'
+    post 'secretadmin/login', to: 'admin_token#create'
+    delete 'secretadmin/delete', to: 'admins#destroy'
     
+    # admin block customer or branch
+    put 'secretadmin/customer/:phone_number', to: 'customers#blocking'
+    put 'secretadmin/branch/:phone_number', to: 'branches#blocking'
 
-    # di bawah ini route belum final
-
-    # pick request
-    post 'customer/pickrequest', to: 'pick_requests#create'
-    put 'branch/pickrequest/:id', to: 'pick_requests#accept'
-
-    get 'item/price', to: 'items#index'
     
   end
 end

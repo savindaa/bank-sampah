@@ -1,6 +1,6 @@
 class V1::BranchesController < ApplicationController
     before_action :authenticate_branch, except: [:index, :create, :blocking]
-    # before_action :authenticate_admin, only: [:blocking]
+    before_action :authenticate_admin, only: [:blocking]
     before_action :set_branch, only: [:show, :update, :destroy]
 
     def index

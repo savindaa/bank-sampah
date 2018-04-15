@@ -13,8 +13,7 @@ class V1::PickRequestsController < ApplicationController
         @pick_request = @customer.pick_requests.new(request_params)
         @pick_request.request_setting(@customer)
         @pick_request.save!
-        render json: { result: true, pick_request: @pick_request.as_json(except: [:customer_id, :branch_id],
-                                                                        include: { trash_details: { only: [:item_name, :weight] } }) }
+        render json: { result: true, pick_request: @pick_request.as_json(only: [:id, :pr_id]) }
     end
 
     # status 1 => "Menunggu konfirmasi"

@@ -1,7 +1,6 @@
 class AcctTransaction < ApplicationRecord
     
-    # include Modifyable
-    
+    # include Modifyable 
     include ValidateUserBlocked
 
     before_save :record_amount
@@ -11,14 +10,13 @@ class AcctTransaction < ApplicationRecord
 
     has_many :trash_details, as: :need_detail, dependent: :destroy
 
-    accepts_nested_attributes_for :trash_details, allow_destroy:true
+    accepts_nested_attributes_for :trash_details, allow_destroy: true
 
     scope :active, -> { where(status: "1") }
     scope :history, -> { where(status: ["2", "3"]) }
     scope :newest, -> { order(updated_at: :desc) }
 
     validates :amount, presence: true, numericality: { only_integer: true }
-    validates :branch_name, presence: true
     validates :customer_phone_number, presence: true
     validate  :funds_availability
     validate  :withdraw_amount_term

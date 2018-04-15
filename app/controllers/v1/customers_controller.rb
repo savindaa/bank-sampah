@@ -1,6 +1,6 @@
 class V1::CustomersController < ApplicationController
     before_action :authenticate_customer, except: [:index, :create, :blocking]
-    # before_action :authenticate_admin, only: [:blocking, :index]
+    before_action :authenticate_admin, only: [:blocking, :index]
     before_action :set_customer, only: [:show, :update, :destroy]
     
     def index
