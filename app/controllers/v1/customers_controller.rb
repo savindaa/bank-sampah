@@ -1,7 +1,7 @@
 class V1::CustomersController < ApplicationController
     before_action :authenticate_customer, except: [:index, :create, :blocking]
     before_action :authenticate_admin, only: [:blocking, :index]
-    before_action :set_customer, only: [:show, :update, :destroy]
+    before_action :set_customer, only: [:show, :update, :destroy, :show_balance]
     
     def index
         @customers = Customer.paginate(page: params[:page], per_page: 20).order(created_at: :desc)
@@ -17,6 +17,10 @@ class V1::CustomersController < ApplicationController
 
     def show
         json_response(@customer)
+    end
+
+    def show_balance
+        render json: @customer.as_json(only: :balance)
     end
 
     def update

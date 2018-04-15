@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     post 'customer/login', to: 'customer_token#create'
     get 'customer/profile', to: 'customers#show'
     put 'customer/update', to: 'customers#update'
+    get 'customer/balance', to: 'customers#show_balance'
 
     # branch index, create, login, profile, update
     get 'branch/index', to: 'branches#index'
