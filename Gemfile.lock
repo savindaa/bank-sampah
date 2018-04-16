@@ -44,6 +44,8 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     arel (8.0.0)
+    arel-helpers (2.6.1)
+      activerecord (>= 3.1.0, < 6)
     bcrypt (3.1.11)
     builder (3.2.3)
     byebug (10.0.1)
@@ -53,12 +55,25 @@ GEM
     crass (1.0.3)
     erubi (1.7.1)
     ffi (1.9.23)
+    forest_liana (2.5.1)
+      arel-helpers
+      bcrypt
+      groupdate
+      jsonapi-serializers (>= 0.14.0)
+      jwt
+      rack-cors
+      rails (>= 4.0)
+      useragent
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    groupdate (4.0.0)
+      activesupport (>= 4.2)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     indonesia (0.5.0)
     jsonapi-renderer (0.2.0)
+    jsonapi-serializers (1.0.0)
+      activesupport
     jwt (1.5.6)
     knock (2.1.1)
       bcrypt (~> 3.1)
@@ -83,6 +98,7 @@ GEM
     pg (1.0.0)
     puma (3.11.3)
     rack (2.0.4)
+    rack-cors (1.0.2)
     rack-test (0.8.3)
       rack (>= 1.0, < 3)
     rails (5.1.5)
@@ -129,6 +145,7 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
+    useragent (0.16.10)
     versionist (1.7.0)
       activesupport (>= 3)
       railties (>= 3)
@@ -146,12 +163,14 @@ DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   bcrypt (~> 3.1.7)
   byebug
+  forest_liana
   indonesia (~> 0.5.0)
   jwt
   knock
   listen (>= 3.0.5, < 3.2)
   pg (>= 0.18, < 2.0)
   puma (~> 3.7)
+  rack-cors
   rails (~> 5.1.5)
   spring
   spring-watcher-listen (~> 2.0.0)

@@ -53,6 +53,7 @@ Rails.application.routes.draw do
     get 'branch/history_pickrequest', to: 'pick_requests#branch_history_pickrequest'
 
 
+
     # di bawah ini belum dipakai
 
     # voucher, /v1/vouchers(/:id)
@@ -75,8 +76,18 @@ Rails.application.routes.draw do
     
     # admin block customer or branch
     put 'secretadmin/customer/:phone_number', to: 'customers#blocking'
-    put 'secretadmin/branch/:phone_number', to: 'branches#blocking'
-
-    
+    put 'secretadmin/branch/:phone_number', to: 'branches#blocking'  
   end
+
+  # forest admin route
+
+  namespace :forest do 
+      post '/actions/block-customer', to: 'customers#block_customer'
+      post '/actions/unblock-customer', to: 'customers#unblock_customer'
+
+      post '/actions/block-branch', to: 'branches#block_branch'
+      post '/actions/unblock-branch', to: 'branches#unblock_branch'
+  end
+
+  mount ForestLiana::Engine => '/forest'
 end
