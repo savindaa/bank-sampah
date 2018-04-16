@@ -26,7 +26,7 @@ class V1::AcctTransactionsController < ApplicationController
         if !Branch.find(@acct_transaction.branch_id).nil?
             @acct_transaction.withdraw_setting(@customer)
             @acct_transaction.save!
-            json_response_post(@acct_transaction)
+            render json: { result: true, acct_transaction: @acct_transaction.as_json(only: [:id, :tr_id]) }
         else
             render json: { result: false, message: 'Bank tidak terdaftar' }
         end
