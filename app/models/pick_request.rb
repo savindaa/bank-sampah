@@ -11,7 +11,6 @@ class PickRequest < ApplicationRecord
 
     scope :active, -> { where(status: ['1', '2']) }
     scope :history, -> { where(status: ['3', '4']) }
-    scope :newest, -> { order(updated_at: :desc) }
 
     validates_presence_of :customer_address, :branch_id
 

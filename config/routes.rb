@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     post 'branch/login', to: 'branch_token#create'
     get 'branch/profile', to: 'branches#show'
     put 'branch/update', to: 'branches#update'
+    get 'branch/balance', to: 'branches#show_balance'
 
     # wilayah indonesia
     get 'provinsi', to: 'indonesia#index_province'
@@ -27,7 +28,7 @@ Rails.application.routes.draw do
     get 'item/price', to: 'items#index'
 
     # transaction, /v1/acct_transactions/[:id] , :update -> update aprroved from false to true
-    resources :acct_transactions, only: [:show, :update, :destroy]
+    resources :acct_transactions, only: [:show, :update]
 
     # transaction withdraw, deposit
     post 'customer/withdraw', to: 'acct_transactions#withdraw'
@@ -38,6 +39,10 @@ Rails.application.routes.draw do
     get 'customer/history_transaction', to: 'acct_transactions#customer_transaction_history'
     get 'branch/active_transaction', to: 'acct_transactions#branch_transaction_active'
     get 'branch/history_transaction', to: 'acct_transactions#branch_transaction_history'
+    get 'customer/show_deposit', to: 'customers#customer_show_deposit'
+    get 'customer/show_withdraw', to: 'customers#customer_show_withdraw'
+    get 'branch/show_deposit', to: 'branches#branch_show_deposit'
+    get 'branch/show_withdraw', to: 'branches#branch_show_withdraw'
 
     # jemput sampah, /v1/pick_requests/:id
     resources :pick_requests, only: [:show]
@@ -54,7 +59,7 @@ Rails.application.routes.draw do
 
 
 
-    # di bawah ini belum dipakai
+    ### di bawah ini belum dipakai ################################
 
     # voucher, /v1/vouchers(/:id)
     resources :vouchers
@@ -76,7 +81,9 @@ Rails.application.routes.draw do
     
     # admin block customer or branch
     put 'secretadmin/customer/:phone_number', to: 'customers#blocking'
-    put 'secretadmin/branch/:phone_number', to: 'branches#blocking'  
+    put 'secretadmin/branch/:phone_number', to: 'branches#blocking' 
+    
+    #######################################
   end
 
   # forest admin route

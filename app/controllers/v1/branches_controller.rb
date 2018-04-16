@@ -1,11 +1,12 @@
 class V1::BranchesController < ApplicationController
     before_action :authenticate_branch, except: [:index, :create, :blocking]
     before_action :authenticate_admin, only: [:blocking]
-    before_action :set_branch, only: [:show, :update, :destroy]
+    before_action :set_branch, except: [:index, :create, :blocking]
+    before_action :authenticate_customer, only: :index
 
     def index
         @branches = Branch.all.order(created_at: :desc)
-        render json: {branches: @branches.as_json(only: [:id, :name, :provinsi, :kabupaten, :kecamatan, :kelurahan, :address])}
+        render json: {branches: @branches.as_json(only: [:id, :name, :address])}
     end
 
     def create
@@ -18,6 +19,20 @@ class V1::BranchesController < ApplicationController
 
     def show
         json_response(@branch)
+    end
+
+    def show_balance
+        render json: @branch.as_json(only: [:phone_number, :balance])
+    end
+
+    def branch_show_deposit
+        @acct_transactions = @branch.acct_transactions.where(status: "2", transaction_type_id: "1").newest
+        render json: { transaction: @acct_transactions.as_json(only: [:id, :tr_id, :amount, :updated_at]) }
+    end
+
+    def branch_show_withdraw
+        @acct_transactions = @branch.acct_transactions.where(status: "2", transaction_type_id: "2").newest
+        render json: { transaction: @acct_transactions.as_json(only: [:id, :tr_id, :amount, :updated_at]) }
     end
 
     def update

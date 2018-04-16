@@ -12,9 +12,8 @@ class AcctTransaction < ApplicationRecord
 
     accepts_nested_attributes_for :trash_details, allow_destroy: true
 
-    scope :active, -> { where(status: "1") }
-    scope :history, -> { where(status: ["2", "3"]) }
-    scope :newest, -> { order(updated_at: :desc) }
+    scope :active, -> { where(status: "1", transaction_type_id: "2") }
+    scope :history, -> { where(status: ["2", "3"], transaction_type_id: "2") }
 
     validates :amount, presence: true, numericality: { only_integer: true }
     validates :customer_phone_number, presence: true

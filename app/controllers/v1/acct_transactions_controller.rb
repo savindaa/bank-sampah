@@ -1,6 +1,6 @@
 class V1::AcctTransactionsController < ApplicationController
-    before_action :authenticate_branch, only: [:deposit, :update, :branch_transaction_active, :branch_transaction_history]
-    before_action :authenticate_customer, only: [:withdraw, :customer_transaction_active, :customer_transaction_history]
+    before_action :authenticate_branch, only: [:deposit, :update, :branch_transaction_active, :branch_transaction_history, :show]
+    before_action :authenticate_customer, only: [:withdraw, :customer_transaction_active, :customer_transaction_history, :show]
     before_action :set_branch, only: [:deposit, :update, :branch_transaction_active, :branch_transaction_history, :destroy]
     before_action :set_customer, only: [:withdraw, :customer_transaction_active, :customer_transaction_history]
 
@@ -55,26 +55,28 @@ class V1::AcctTransactionsController < ApplicationController
             json_error(@acct_transaction)
         end
     end
-
+    
+    ## 4 method di bawah hanya menunjukkan withdraw
     def branch_transaction_active
         @acct_transactions = @branch.acct_transactions.active.newest
-        render json: {transaction: @acct_transactions.as_json(except: [:point_received, :adjusted_bal],include: { customer: { only: :name } }) }
+        render json: { transaction: @acct_transactions.as_json(except: [:point_received, :adjusted_bal],include: { customer: { only: :name } }) }
     end
 
     def branch_transaction_history
         @acct_transactions = @branch.acct_transactions.history.newest
-        render json: {transaction: @acct_transactions.as_json(except: [:point_received, :adjusted_bal],include: { customer: { only: :name } }) }
+        render json: { transaction: @acct_transactions.as_json(except: [:point_received, :adjusted_bal],include: { customer: { only: :name } }) }
     end
 
     def customer_transaction_active
         @acct_transactions = @customer.acct_transactions.active.newest
-        render json: {transaction: @acct_transactions}
+        render json: { transaction: @acct_transactions }
     end
 
     def customer_transaction_history
         @acct_transactions = @customer.acct_transactions.history.newest
-        render json: {transaction: @acct_transactions}    
+        render json: { transaction: @acct_transactions }    
     end
+    ##
 
     def destroy
         @acct_transaction = @branch.acct_transactions.find(params[:id]) if @branch

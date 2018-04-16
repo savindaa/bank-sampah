@@ -1,6 +1,7 @@
 class V1::AcctTransactionSerializer < ActiveModel::Serializer
-  attributes :id, :tr_id, :transaction_type_id, :customer_phone_number, :amount, :created_at, :branch_name, :status, :comment, :confirmed_at
+  attributes :id, :tr_id, :transaction_type_id, :amount, :created_at, :status, :comment, :confirmed_at
 
+  belongs_to :branch
   belongs_to :customer 
   has_many :trash_details
 
