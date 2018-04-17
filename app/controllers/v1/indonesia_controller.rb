@@ -1,5 +1,4 @@
 class V1::IndonesiaController < ApplicationController
-    before_action :authenticate_customer
 
     def index_province
         @provinces = Province.all
