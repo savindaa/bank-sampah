@@ -69,12 +69,12 @@ class V1::AcctTransactionsController < ApplicationController
 
     def customer_transaction_active
         @acct_transactions = @customer.acct_transactions.active.newest
-        render json: { transaction: @acct_transactions }
+        render json: { transaction: @acct_transactions.as_json(except: [:point_received, :adjusted_bal],include: { branch: { only: [:address, :phone_number] } }) }
     end
 
     def customer_transaction_history
         @acct_transactions = @customer.acct_transactions.history.newest
-        render json: { transaction: @acct_transactions }    
+        render json: { transaction: @acct_transactions.as_json(except: [:point_received, :adjusted_bal],include: { branch: { only: [:address, :phone_number] } }) }    
     end
     ##
 
