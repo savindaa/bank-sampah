@@ -178,5 +178,8 @@ DEPENDENCIES
   versionist
   will_paginate (~> 3.1.0)
 
+RUBY VERSION
+   ruby 2.4.3p205
+
 BUNDLED WITH
    1.16.1
