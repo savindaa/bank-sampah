@@ -29,14 +29,15 @@ Rails.application.routes.draw do
 
     # transaction, /v1/acct_transactions/[:id] , :update -> update aprroved from false to true
     resources :acct_transactions, only: [:show, :update]
+    get 'transaction/:tr_id', to: 'acct_transactions#show_by_tr'
 
     # transaction withdraw, deposit
     post 'customer/withdraw', to: 'acct_transactions#withdraw'
     post 'branch/deposit', to: 'acct_transactions#deposit'
 
     # showing transaction
-    get 'customer/active_transaction', to: 'acct_transactions#customer_transaction_active'
-    get 'customer/history_transaction', to: 'acct_transactions#customer_transaction_history'
+    # get 'customer/active_transaction', to: 'acct_transactions#customer_transaction_active'
+    # get 'customer/history_transaction', to: 'acct_transactions#customer_transaction_history'
     get 'branch/active_transaction', to: 'acct_transactions#branch_transaction_active'
     get 'branch/history_transaction', to: 'acct_transactions#branch_transaction_history'
     get 'customer/show_deposit', to: 'customers#customer_show_deposit'
@@ -44,8 +45,13 @@ Rails.application.routes.draw do
     get 'branch/show_deposit', to: 'branches#branch_show_deposit'
     get 'branch/show_withdraw', to: 'branches#branch_show_withdraw'
 
+    # showing request
+    get 'customer/active_transaction', to: 'customers#customer_active_request'
+    get 'customer/history_transaction', to: 'customers#customer_history_request'
+
     # jemput sampah, /v1/pick_requests/:id
     resources :pick_requests, only: [:show]
+    get 'pickrequest/:pr_id', to: 'pick_requests#show_by_pr'
 
     # pick request
     post 'customer/pickrequest', to: 'pick_requests#create'
@@ -81,7 +87,7 @@ Rails.application.routes.draw do
     
     # admin block customer or branch
     put 'secretadmin/customer/:phone_number', to: 'customers#blocking'
-    put 'secretadmin/branch/:phone_number', to: 'branches#blocking' 
+    put 'secretadmin/branch/:phone_number', to: 'branches#blocking'
     
     #######################################
   end

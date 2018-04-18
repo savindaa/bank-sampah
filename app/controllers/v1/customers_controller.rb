@@ -33,6 +33,20 @@ class V1::CustomersController < ApplicationController
         render json: { transaction: @acct_transactions.as_json(only: [:id, :tr_id, :amount, :updated_at]) }
     end
 
+    def customer_active_request
+        @acct_transactions = @customer.acct_transactions.where(status: "1", transaction_type_id: "2")
+        @pick_requests = @customer.pick_requests.where(status: ["1", "2"])
+        @requests = (@acct_transactions | @pick_requests).sort_by {|h| h[:updated_at]}.reverse
+        render json: { requests: @requests }, status: :ok
+    end
+
+    def customer_history_request
+        @acct_transactions = @customer.acct_transactions.where(status: ["2", "3"], transaction_type_id: "2")
+        @pick_requests = @customer.pick_requests.where(status: ["3", "4"])
+        @requests = (@acct_transactions | @pick_requests).sort_by {|h| h[:updated_at]}.reverse
+        render json: { requests: @requests }, status: :ok
+    end
+
     def update
         @customer.update(customer_params)
         json_true

@@ -9,6 +9,11 @@ class V1::AcctTransactionsController < ApplicationController
         json_response(@acct_transaction)
     end
 
+    def show_by_tr
+        @acct_transaction = AcctTransaction.find_by(tr_id: params[:tr_id])
+        json_response(@acct_transaction)
+    end
+
     def deposit
         @acct_transaction = @branch.acct_transactions.new(deposit_params)
         if !Customer.find_by(phone_number: @acct_transaction.customer_phone_number).nil?
@@ -67,15 +72,15 @@ class V1::AcctTransactionsController < ApplicationController
         render json: { transaction: @acct_transactions.as_json(except: [:point_received, :adjusted_bal],include: { customer: { only: :name } }) }
     end
 
-    def customer_transaction_active
-        @acct_transactions = @customer.acct_transactions.active.newest
-        render json: { transaction: @acct_transactions.as_json(except: [:point_received, :adjusted_bal],include: { branch: { only: [:address, :phone_number] } }) }
-    end
+    # def customer_transaction_active
+    #     @acct_transactions = @customer.acct_transactions.active.newest
+    #     render json: { transaction: @acct_transactions.as_json(except: [:point_received, :adjusted_bal],include: { branch: { only: [:address, :phone_number] } }) }
+    # end
 
-    def customer_transaction_history
-        @acct_transactions = @customer.acct_transactions.history.newest
-        render json: { transaction: @acct_transactions.as_json(except: [:point_received, :adjusted_bal],include: { branch: { only: [:address, :phone_number] } }) }    
-    end
+    # def customer_transaction_history
+    #     @acct_transactions = @customer.acct_transactions.history.newest
+    #     render json: { transaction: @acct_transactions.as_json(except: [:point_received, :adjusted_bal],include: { branch: { only: [:address, :phone_number] } }) }    
+    # end
     ##
 
     def destroy

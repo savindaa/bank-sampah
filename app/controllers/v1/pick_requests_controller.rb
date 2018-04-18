@@ -9,6 +9,11 @@ class V1::PickRequestsController < ApplicationController
         json_response(@pick_request)
     end
 
+    def show_by_pr
+        @pick_request = PickRequest.find_by(pr_id: params[:pr_id])
+        json_response(@pick_request)
+    end
+
     def create
         @pick_request = @customer.pick_requests.new(request_params)
         @pick_request.request_setting(@customer)
