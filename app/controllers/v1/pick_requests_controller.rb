@@ -1,6 +1,6 @@
 class V1::PickRequestsController < ApplicationController
-    before_action :authenticate_branch, only: [:accept, :branch_active_pickrequest, :branch_history_pickrequest, :show]
-    before_action :authenticate_customer, only: [:create, :customer_active_pickrequest, :customer_history_pickrequest, :show]
+    before_action :authenticate_branch, only: [:accept, :branch_active_pickrequest, :branch_history_pickrequest]
+    before_action :authenticate_customer, only: [:create, :customer_active_pickrequest, :customer_history_pickrequest]
     before_action :set_branch, only: [:accept, :branch_active_pickrequest, :branch_history_pickrequest]
     before_action :set_customer, only: [:create, :customer_active_pickrequest, :customer_history_pickrequest]
 

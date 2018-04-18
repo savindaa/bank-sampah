@@ -1,6 +1,6 @@
 class V1::AcctTransactionsController < ApplicationController
-    before_action :authenticate_branch, only: [:deposit, :update, :branch_transaction_active, :branch_transaction_history, :show]
-    before_action :authenticate_customer, only: [:withdraw, :customer_transaction_active, :customer_transaction_history, :show]
+    before_action :authenticate_branch, only: [:deposit, :update, :branch_transaction_active, :branch_transaction_history]
+    before_action :authenticate_customer, only: [:withdraw, :customer_transaction_active, :customer_transaction_history]
     before_action :set_branch, only: [:deposit, :update, :branch_transaction_active, :branch_transaction_history, :destroy]
     before_action :set_customer, only: [:withdraw, :customer_transaction_active, :customer_transaction_history]
 

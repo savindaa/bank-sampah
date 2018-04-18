@@ -87,8 +87,4 @@ class AcctTransaction < ApplicationRecord
               self.adjusted_bal = Customer.find(self.customer_id).balance - self.amount
         end
     end
-
-    # def branch_id
-    #     self.branch
-    # end
 end
