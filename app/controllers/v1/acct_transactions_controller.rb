@@ -21,6 +21,7 @@ class V1::AcctTransactionsController < ApplicationController
             @acct_transaction.save!
             @acct_transaction.modify_acct_balance
             render json: { result: true, acct_transaction: @acct_transaction.as_json(except: [:point_received, :adjusted_bal],include: { trash_details: { only: [:item_name, :weight] } }) }
+            # render json: { result: true, acct_transaction: @acct_transaction }
         else
             render json: { result: false, message: 'Nasabah tidak terdaftar' }
         end
