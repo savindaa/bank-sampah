@@ -5,12 +5,7 @@ if ForestLiana::UserSpace.const_defined?('BranchController')
   
       def destroy
         teams = forest_user.dig('data', 'data', 'teams')
-        
-        if teams.include?('Management')
-          default_destroy
-        else
-          render status: 403, plain: 'Sorry, you\'re not allowed to delete a branch. Ask someone in the Management team.'
-        end
+        default_destroy
       end
     end
   end
