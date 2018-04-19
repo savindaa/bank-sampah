@@ -19,9 +19,13 @@ class V1::AcctTransactionsController < ApplicationController
         if !Customer.find_by(phone_number: @acct_transaction.customer_phone_number).nil?
             @acct_transaction.deposit_setting(@branch)
             @acct_transaction.save!
-            @acct_transaction.modify_acct_balance
-            render json: { result: true, acct_transaction: @acct_transaction.as_json(except: [:point_received, :adjusted_bal],include: { trash_details: { only: [:item_name, :weight] } }) }
-            # render json: { result: true, acct_transaction: @acct_transaction }
+            if @acct_transaction.transaction_type_id == "1" && @acct_transaction.amount < Branch.find(@acct_transaction.branch_id).balance
+                @acct_transaction.modify_acct_balance
+                render json: { result: true, acct_transaction: @acct_transaction.as_json(except: [:point_received, :adjusted_bal],include: { trash_details: { only: [:item_name, :weight] } }) }
+            else
+                @acct_transaction.destroy
+                render json: { result: false, acct_transaction: @acct_transaction.as_json(except: [:point_received, :adjusted_bal],include: { trash_details: { only: [:item_name, :weight] } }) }
+            end
         else
             render json: { result: false, message: 'Nasabah tidak terdaftar' }
         end

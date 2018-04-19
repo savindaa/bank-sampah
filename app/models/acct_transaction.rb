@@ -33,6 +33,8 @@ class AcctTransaction < ApplicationRecord
     def funds_availability
         if self.transaction_type_id == "2" && self.amount > Customer.find(self.customer_id).balance
             errors.add(:amount, 'Saldo Anda kurang')
+        # elsif self.transaction_type_id == "1" && self.amount > Branch.find(self.branch_id).balance
+        #     errors.add(:amount, 'Saldo Anda kurang')
         end
     end
 
@@ -72,10 +74,10 @@ class AcctTransaction < ApplicationRecord
             when "1"
               customer.update(balance: customer.balance + self.amount)
               # customer.update(point: customer.point + self.point_received)
-              branch.update(balance: branch.balance + self.amount)
+              branch.update(balance: branch.balance - self.amount)
             when "2"
               customer.update(balance: customer.balance - self.amount)
-              branch.update(balance: branch.balance - self.amount)
+              branch.update(balance: branch.balance + self.amount)
         end
     end
 
