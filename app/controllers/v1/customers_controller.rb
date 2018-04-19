@@ -12,6 +12,7 @@ class V1::CustomersController < ApplicationController
         @customer = Customer.new(register_params)
         @customer.password_confirmation = @customer.password
         @customer.save!
+        @customer.formatting_name
         json_true(:created)
     end
 

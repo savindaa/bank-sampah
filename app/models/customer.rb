@@ -14,4 +14,8 @@ class Customer < ApplicationRecord
         phone_number = request.params["auth"] && request.params["auth"]["phone_number"]
         self.find_by phone_number: phone_number 
     end
+
+    def formatting_name
+        self.update(name: self.name.to_s.capitalize)
+    end
 end

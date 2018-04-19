@@ -17,6 +17,6 @@ class Branch < ApplicationRecord
 
     def formatting_name
         rand_number = rand(500..999).to_s
-        self.update(name: "Bank " + self.name.to_s + " - " + rand_number)
+        self.update(name: "Bank " + self.name.to_s.capitalize + " - " + rand_number)
     end
 end
