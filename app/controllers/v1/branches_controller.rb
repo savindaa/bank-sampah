@@ -4,7 +4,7 @@ class V1::BranchesController < ApplicationController
     before_action :set_branch, except: [:index, :create, :blocking]
 
     def index
-        @branches = Branch.all.order(created_at: :desc)
+        @branches = Branch.where(blocked: false).order(created_at: :desc)
         render json: {branches: @branches.as_json(only: [:id, :name, :address])}
     end
 
