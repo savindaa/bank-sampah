@@ -16,6 +16,9 @@ class Customer < ApplicationRecord
     end
 
     def formatting_name
-        self.update(name: self.name.to_s.capitalize)
+        splitted_name = self.name.split(' ').map{ |s| s.capitalize }
+        splitted_name -= %w{Bank}
+        merged_name = splitted_name.join(' ')
+        self.update(name: merged_name)
     end
 end

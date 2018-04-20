@@ -17,6 +17,9 @@ class Branch < ApplicationRecord
 
     def formatting_name
         rand_number = rand(500..999).to_s
-        self.update(name: "Bank " + self.name.to_s.capitalize + " - " + rand_number)
+        splitted_name = self.name.split(' ').map{ |s| s.capitalize }
+        splitted_name -= %w{Bank}
+        merged_name = splitted_name.join(' ')
+        self.update(name: "Bank " + merged_name + " - " + rand_number)
     end
 end
