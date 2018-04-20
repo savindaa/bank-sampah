@@ -56,6 +56,7 @@ Rails.application.routes.draw do
     # pick request
     post 'customer/pickrequest', to: 'pick_requests#create'
     put 'branch/pickrequest/:id', to: 'pick_requests#accept'
+    put 'branch/updateaftervalidate/:id', to: 'pick_requests#update_after_validate'
 
     # showing jemput sampah
     get 'customer/active_pickrequest', to: 'pick_requests#customer_active_pickrequest'

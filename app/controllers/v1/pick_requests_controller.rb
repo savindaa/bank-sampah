@@ -1,7 +1,7 @@
 class V1::PickRequestsController < ApplicationController
-    before_action :authenticate_branch, only: [:accept, :branch_active_pickrequest, :branch_history_pickrequest]
+    before_action :authenticate_branch, only: [:accept, :branch_active_pickrequest, :branch_history_pickrequest, :update_after_validate]
     before_action :authenticate_customer, only: [:create, :customer_active_pickrequest, :customer_history_pickrequest]
-    before_action :set_branch, only: [:accept, :branch_active_pickrequest, :branch_history_pickrequest]
+    before_action :set_branch, only: [:accept, :branch_active_pickrequest, :branch_history_pickrequest, :update_after_validate]
     before_action :set_customer, only: [:create, :customer_active_pickrequest, :customer_history_pickrequest]
 
     def show
@@ -43,6 +43,18 @@ class V1::PickRequestsController < ApplicationController
                 @pick_request.update(status: "2")
                 json_error(@pick_request)
             end
+        else
+            json_error(@pick_request)
+        end
+    end
+
+    def update_after_validate
+        @pick_request = @branch.pick_requests.find(params[:id]) if @branch
+
+        if @pick_request.status == "3"
+            @pick_request.trash_details.delete_all
+            @pick_request.update(after_validate_params)
+            json_true
         else
             json_error(@pick_request)
         end
@@ -95,6 +107,10 @@ class V1::PickRequestsController < ApplicationController
 
     def accept_params
         params.require(:pick_request).permit(:comment, :status)
+    end
+
+    def after_validate_params
+        params.require(:pick_request).permit(trash_details_attributes: [:item_name, :weight])
     end
 
 end
